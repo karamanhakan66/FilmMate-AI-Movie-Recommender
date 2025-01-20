@@ -16,8 +16,8 @@ FilmMate, kullanıcılara film önerileri sunan bir web uygulamasıdır. Tür be
 1. Repoyu klonlayın:
 
 ```bash
-git clone https://github.com/your-username/filmmate.git
-cd filmmate
+git clone https://github.com/karamanhakan66/FilmMate-AI-Movie-Recommender.git
+cd FilmMate-AI-Movie-Recommender
 ```
 
 2. Sanal ortam oluşturun ve aktifleştirin:
@@ -81,6 +81,6 @@ Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICEN
 
 ## İletişim
 
-FilmMate-AI-Movie-Recommender
+Hakan Karaman - [GitHub](https://github.com/karamanhakan66)
 
-Project Link: [https://github.com/your-username/filmmate](https://github.com/your-username/filmmate)
+Project Link: [https://github.com/karamanhakan66/FilmMate-AI-Movie-Recommender](https://github.com/karamanhakan66/FilmMate-AI-Movie-Recommender)
