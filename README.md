@@ -8,6 +8,10 @@
 ![TMDB API](https://img.shields.io/badge/TMDB%20API-v3-01b4e4)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+## Canlı Demo
+Uygulamanın canlı versiyonunu görmek için: [FilmMate AI Demo](https://filmmate-ai.onrender.com)
+
+
 </div>
 
 <div align="center">
