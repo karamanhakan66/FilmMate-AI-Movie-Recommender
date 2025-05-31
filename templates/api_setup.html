@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section - API Setup -->
+<section class="relative py-16 md:py-28 overflow-hidden bg-gradient-to-br from-primary-50 via-violet-50 to-fuchsia-50 dark:from-primary-900 dark:via-violet-900 dark:to-fuchsia-900 min-h-[70vh] flex items-center">
+    <!-- Modern animated background with layered gradients -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute w-full h-full bg-grid-pattern opacity-5 dark:opacity-10"></div>
+        <div class="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white/40 to-transparent dark:from-dark-800/40 backdrop-blur-sm"></div>
+        <div class="absolute -top-[10%] -right-[10%] w-[70%] h-[50%] bg-gradient-conic from-primary-500/30 via-fuchsia-500/20 to-violet-500/30 rounded-full filter blur-3xl animate-[spin_40s_linear_infinite] dark:from-primary-600/30 dark:via-fuchsia-600/20 dark:to-violet-600/30"></div>
+        <div class="absolute -bottom-[10%] -left-[10%] w-[70%] h-[50%] bg-gradient-conic from-fuchsia-500/30 via-primary-500/20 to-violet-500/30 rounded-full filter blur-3xl animate-[spin_30s_linear_infinite_reverse] dark:from-fuchsia-600/30 dark:via-primary-600/20 dark:to-violet-600/30"></div>
+        <!-- Glowing dots pattern in the background -->
+        <div class="absolute inset-0 opacity-20 dark:opacity-30 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.8)_0,rgba(255,255,255,0)_60%)]"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative">
+        <div class="flex flex-col items-center justify-center max-w-lg mx-auto">
+            <!-- Film İkonu (Dekoratif) -->
+            <div class="mb-8 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary-500 to-fuchsia-500 shadow-lg animate-[float_6s_ease-in-out_infinite]">
+                    <i class="fas fa-film text-3xl text-white"></i>
+                </div>
+            </div>
+
+            <div class="w-full bg-white/95 dark:bg-gray-800/95 rounded-2xl p-8 shadow-xl backdrop-blur-sm">
+                <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center text-gray-900 dark:text-white">
+                    TMDB API Anahtarı Gerekli
+                </h1>
+                
+                <p class="mb-6 text-gray-800 dark:text-gray-100 text-center font-medium">
+                    FilmMate uygulamasını kullanabilmek için TMDB (The Movie Database) API anahtarını girmeniz gerekiyor.
+                </p>
+
+                <div class="space-y-2 mb-6 text-sm text-gray-800 dark:text-gray-200">
+                    <p><i class="fas fa-info-circle text-primary-500 mr-2"></i> TMDB API anahtarı ücretsiz olarak <a href="https://www.themoviedb.org/settings/api" target="_blank" class="text-primary-600 dark:text-primary-300 hover:underline font-medium">themoviedb.org</a> adresinden alınabilir.</p>
+                    <p><i class="fas fa-lock text-primary-500 mr-2"></i> API anahtarınız yerel cihazınızda güvenli bir şekilde saklanır ve başka bir yere gönderilmez.</p>
+                </div>
+
+                {% if error %}
+                <div class="p-3 mb-4 rounded-lg bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-sm">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> {{ error }}
+                </div>
+                {% endif %}
+
+                <form action="{{ url_for('save_api') }}" method="post" class="space-y-4">
+                    <div class="space-y-2">
+                        <label for="api_key" class="block text-gray-900 dark:text-white font-medium">TMDB API Anahtarı</label>
+                        <div class="relative">
+                            <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"></i>
+                            <input 
+                                type="text" 
+                                id="api_key" 
+                                name="api_key" 
+                                placeholder="API anahtarınızı buraya girin..." 
+                                class="w-full pl-12 pr-4 py-4 rounded-xl bg-white dark:bg-dark-700 border border-gray-200 dark:border-dark-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-primary-500 to-fuchsia-500 hover:from-primary-600 hover:to-fuchsia-600 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                        <i class="fas fa-save mr-2"></i>
+                        API Anahtarını Kaydet ve Devam Et
+                    </button>
+                </form>
+
+                <div class="mt-6 border-t border-gray-200 dark:border-gray-600 pt-4">
+                    <div class="flex items-center justify-center text-sm text-gray-700 dark:text-gray-300 gap-2">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Yardım için <a href="https://github.com/karamanhakan66/FilmMate-AI-Movie-Recommender" target="_blank" class="text-primary-600 dark:text-primary-400 hover:underline">GitHub sayfasını</a> ziyaret edin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

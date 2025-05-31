@@ -1,0 +1,13 @@
+"""
+FilmMate - Yapılandırma Dosyası
+Bu dosyayı 'config.py' olarak kopyalayın ve TMDB API anahtarınızı ekleyin.
+config.py dosyası git tarafından izlenmeyecektir (gitignore'a eklendi).
+"""
+
+# TMDB API anahtarını buraya ekleyin
+# API anahtarı almak için: https://www.themoviedb.org/settings/api
+TMDB_API_KEY = "TMDB_API_ANAHTARINIZI_BURAYA_EKLEYIN"
+
+# Bu sabitler artık app.py'da tanımlandığı için kullanılmıyor
+# TMDB_BASE_URL = "https://api.themoviedb.org/3"
+# POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"

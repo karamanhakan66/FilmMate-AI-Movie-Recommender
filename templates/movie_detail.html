@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }} - FilmMate</title>
+    
+    <!-- Tailwind CSS 3.x -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        },
+                        secondary: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75',
+                            950: '#4a044e',
+                        },
+                        dark: {
+                            100: '#cfd1d9',
+                            200: '#a8abb8',
+                            300: '#7d8196',
+                            400: '#525675',
+                            500: '#2b2d3f',
+                            600: '#212333',
+                            700: '#1a1b2a',
+                            800: '#12121e',
+                            900: '#0a0a10',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 dark:bg-dark-700 text-gray-800 dark:text-gray-100 font-sans min-h-screen">
+    <div class="flex flex-col min-h-screen">
+        <!-- Navbar -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-dark-600 shadow-md backdrop-blur-lg bg-opacity-90 dark:bg-opacity-90">
+            <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                <a href="{{ url_for('home') }}" class="flex items-center gap-2 text-primary-600 dark:text-primary-400">
+                    <i class="fas fa-film text-2xl"></i>
+                    <span class="text-xl font-bold">FilmMate</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-dark-500 transition-colors duration-200">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <a href="{{ url_for('home') }}" class="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                        <i class="fas fa-home"></i>
+                        <span>Ana Sayfa</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Film Detay Sayfası -->
+        <main class="flex-grow pt-24 pb-12">
+            <div class="container mx-auto px-4">
+                <div class="bg-white dark:bg-dark-600 rounded-2xl shadow-lg overflow-hidden">
+                    <div class="p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                        <!-- Film Poster -->
+                        <div class="w-full md:w-1/3 lg:w-1/4">
+                            <div class="relative aspect-[2/3] overflow-hidden rounded-xl shadow-card">
+                                <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" 
+                                     class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                                <div class="absolute top-3 left-3 bg-black/50 backdrop-blur-sm text-white text-xs font-medium py-1 px-2 rounded-full">
+                                    {{ movie.title.split('(')[-1].replace(')', '') if '(' in movie.title else 'N/A' }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Film Bilgileri -->
+                        <div class="flex-1">
+                            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ movie.title }}</h1>
+                            
+                            <!-- Türler -->
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                {% for genre in movie.genres.split('|') %}
+                                                    {% if genre.strip().lower() == 'action' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-100 text-red-500 dark:bg-red-900/20 dark:text-red-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'adventure' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-amber-100 text-amber-500 dark:bg-amber-900/20 dark:text-amber-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'animation' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-emerald-100 text-emerald-500 dark:bg-emerald-900/20 dark:text-emerald-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'comedy' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-orange-100 text-orange-500 dark:bg-orange-900/20 dark:text-orange-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'crime' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-violet-100 text-violet-500 dark:bg-violet-900/20 dark:text-violet-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'documentary' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-cyan-100 text-cyan-500 dark:bg-cyan-900/20 dark:text-cyan-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'drama' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-100 text-pink-500 dark:bg-pink-900/20 dark:text-pink-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'family' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-lime-100 text-lime-500 dark:bg-lime-900/20 dark:text-lime-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'fantasy' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-purple-100 text-purple-500 dark:bg-purple-900/20 dark:text-purple-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'history' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'horror' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'music' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-pink-100 text-pink-400 dark:bg-pink-900/20 dark:text-pink-300">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'mystery' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-300">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'romance' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-100 text-red-400 dark:bg-red-900/20 dark:text-red-300">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'sci-fi' or genre.strip().lower() == 'science fiction' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-100 text-blue-500 dark:bg-blue-900/20 dark:text-blue-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'thriller' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'war' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-300">{{ genre.strip() }}</span>
+                                {% elif genre.strip().lower() == 'western' %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">{{ genre.strip() }}</span>
+                                {% else %}
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">{{ genre.strip() }}</span>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Açıklama -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Film Hakkında</h3>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    {{ movie.description if movie.description else 'Bu film için açıklama bulunmamaktadır.' }}
+                                </p>
+                            </div>
+                            
+                            <!-- Butonlar -->
+                            <div class="flex flex-wrap gap-3">
+                                <button onclick="getRecommendations('{{ movie.title }}')" 
+                                        class="py-2.5 px-5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fas fa-magic"></i>
+                                    <span>Benzer Filmler</span>
+                                </button>
+                                <a href="{{ url_for('home') }}" 
+                                   class="py-2.5 px-5 bg-gray-200 dark:bg-dark-500 hover:bg-gray-300 dark:hover:bg-dark-400 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Ana Sayfaya Dön</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Benzer Filmler Bölümü -->
+            <section class="mt-12">
+                <div class="mb-8 text-center">
+                    <h2 class="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Benzer Filmler</h2>
+                    <div class="w-24 h-1 bg-primary-500 mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {% for similar_movie in similar_movies %}
+                    <div class="group">
+                        <div class="relative bg-white dark:bg-dark-600 rounded-lg overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 h-full flex flex-col transform hover:-translate-y-1">
+                            <div class="relative aspect-[2/3] overflow-hidden">
+                                <img src="{{ similar_movie.poster_url }}" alt="{{ similar_movie.title }}" 
+                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-60 group-hover:opacity-70 transition-opacity duration-300"></div>
+                                <div class="absolute top-2 left-2 bg-black/50 backdrop-blur-sm text-white text-xs font-medium py-0.5 px-1.5 rounded-full">
+                                    {{ similar_movie.title.split('(')[-1].replace(')', '') if '(' in similar_movie.title else '' }}
+                                </div>
+                                <div class="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <button onclick="getRecommendations('{{ similar_movie.title }}')" 
+                                        class="bg-primary-600/90 hover:bg-primary-700 text-white p-2 rounded-full transform transition-transform duration-300 hover:scale-110"
+                                        title="Benzer Filmler">
+                                        <i class="fas fa-magic"></i>
+                                    </button>
+                                    <a href="{{ url_for('movie_detail', movie_title=similar_movie.title) }}" 
+                                       class="bg-secondary-600/90 hover:bg-secondary-700 text-white p-2 rounded-full transform transition-transform duration-300 hover:scale-110"
+                                       title="Film Detayları">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-3 flex flex-col flex-grow">
+                                <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-1.5 line-clamp-1">
+                                    {{ similar_movie.title }}
+                                </h3>
+                                <div class="flex flex-wrap gap-0.5 mb-3">
+                                    {% for genre in similar_movie.genres.split('|')[:2] %}
+                                    {% if genre.strip().lower() == 'action' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-red-100 text-red-500 dark:bg-red-900/20 dark:text-red-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'adventure' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-500 dark:bg-amber-900/20 dark:text-amber-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'animation' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-500 dark:bg-emerald-900/20 dark:text-emerald-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'comedy' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-500 dark:bg-orange-900/20 dark:text-orange-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'crime' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-violet-100 text-violet-500 dark:bg-violet-900/20 dark:text-violet-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'documentary' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-cyan-100 text-cyan-500 dark:bg-cyan-900/20 dark:text-cyan-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'drama' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-pink-100 text-pink-500 dark:bg-pink-900/20 dark:text-pink-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'family' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-lime-100 text-lime-500 dark:bg-lime-900/20 dark:text-lime-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'fantasy' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-500 dark:bg-purple-900/20 dark:text-purple-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'history' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'horror' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'music' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-pink-100 text-pink-400 dark:bg-pink-900/20 dark:text-pink-300">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'mystery' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-300">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'romance' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-red-100 text-red-400 dark:bg-red-900/20 dark:text-red-300">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'sci-fi' or genre.strip().lower() == 'science fiction' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-500 dark:bg-blue-900/20 dark:text-blue-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'thriller' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'war' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-300">{{ genre.strip() }}</span>
+                                    {% elif genre.strip().lower() == 'western' %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">{{ genre.strip() }}</span>
+                                    {% else %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">{{ genre.strip() }}</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if similar_movie.genres.split('|')|length > 3 %}
+                                    <span class="text-xs font-medium px-1.5 py-0.5 rounded-full bg-gray-200 dark:bg-dark-500 text-gray-600 dark:text-gray-300">
+                                        +{{ similar_movie.genres.split('|')|length - 3 }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div class="mt-auto flex gap-1">
+                                    <button class="flex-1 py-1.5 px-2 bg-primary-600 hover:bg-primary-700 text-white text-xs rounded transition-colors duration-200 flex items-center justify-center gap-1" onclick="getRecommendations('{{ similar_movie.title }}')">
+                                        <i class="fas fa-magic"></i>
+                                        <span>Benzer</span>
+                                    </button>
+                                    <a href="{{ url_for('movie_detail', movie_title=similar_movie.title) }}" class="flex-1 py-1.5 px-2 bg-gray-200 dark:bg-dark-500 hover:bg-gray-300 dark:hover:bg-dark-400 text-gray-800 dark:text-gray-200 text-xs rounded transition-colors duration-200 flex items-center justify-center gap-1">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Detay</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            </div>
+        </main>
+
+        <footer class="bg-white dark:bg-dark-600 py-8 border-t border-gray-200 dark:border-dark-500 mt-auto">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-6 md:mb-0 text-center md:text-left">
+                        <a href="/" class="flex items-center justify-center md:justify-start gap-2 text-primary-600 dark:text-primary-400 mb-2">
+                            <i class="fas fa-film text-xl"></i>
+                            <span class="text-lg font-bold">FilmMate</span>
+                        </a>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Film keşfetmenin en akıllı yolu</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 dark:bg-dark-500 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 dark:bg-dark-500 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 dark:bg-dark-500 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 dark:bg-dark-500 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <hr class="my-6 border-gray-200 dark:border-dark-500">
+                <div class="text-center text-gray-600 dark:text-gray-400 text-sm">
+                    &copy; 2023 FilmMate. Tüm hakları saklıdır.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Dosyaları -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Dark mode toggle functionality
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // Check for saved theme preference or respect OS preference
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</body>
+</html>

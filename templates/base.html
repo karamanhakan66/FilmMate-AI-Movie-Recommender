@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FilmMate - Film Öneri Sistemi{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#8B5CF6',
+                            50: '#F5F3FF',
+                            100: '#EDE9FE',
+                            200: '#DDD6FE',
+                            300: '#C4B5FD',
+                            400: '#A78BFA',
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                            700: '#6D28D9',
+                            800: '#5B21B6',
+                            900: '#4C1D95'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Temel animasyonlar ve özel stiller */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .glow {
+            filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+        }
+        .dark .glow {
+            filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.8));
+        }
+    </style>
+    {% block head_extra %}{% endblock %}
+</head>
+<body class="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+    <header class="bg-white dark:bg-gray-800 shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-bold text-primary-600 dark:text-primary-400 flex items-center">
+                    <i class="fas fa-film mr-2"></i>
+                    <span>FilmMate</span>
+                </a>
+                <div>
+                    <!-- Ekstra header içeriği buraya gelebilir -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white dark:bg-gray-800 shadow-md mt-12">
+        <div class="container mx-auto px-4 py-6">
+            <div class="text-center text-gray-600 dark:text-gray-400">
+                <p>FilmMate AI - Film Öneri Sistemi &copy; {% block year %}2025{% endblock %}</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
